@@ -12,6 +12,7 @@ export async function GetDalleResponse(userPrompt: string) {
     const response = await openai.createImage(options);
     return response.data.data[0].url;
   } catch (error: any) {
+    console.log(error);
     return `❗ Error: ${error.response.data.error.message}`;
   }
 }

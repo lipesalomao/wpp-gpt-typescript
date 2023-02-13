@@ -18,6 +18,7 @@ export async function GetDavinciResponse(userPrompt: string) {
 
     return `Chat GPT 🤖\n\n ${botResponse.trim()}`;
   } catch (error: any) {
+    console.log(error);
     return `❗ Error: ${error.response.data.error.message}`;
   }
 }

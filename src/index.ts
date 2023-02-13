@@ -1,8 +1,8 @@
 import { GetDalleResponse } from "./services/DalleService";
-import { create, Message, Whatsapp } from "venom-bot";
+import { create, Whatsapp } from "venom-bot";
 import { Configuration, OpenAIApi } from "openai";
-import * as dotenv from "dotenv";
 import { GetDavinciResponse } from "./services/Davinci3Service";
+import * as dotenv from "dotenv";
 
 dotenv.config();
 
@@ -20,15 +20,19 @@ create({
   .then((client: Whatsapp) => start(client))
   .catch((err) => {
     console.error(err);
+    return "❗ Error: " + err;
   });
 
 async function commands(client: any, message: any) {
   const iaCommands = {
-    davinci3: "/reply",
+    davinci3: "/bot",
     dalle: "/imagine",
   };
-
-  let firstWord = message.text.substring(0, message.text.indexOf(" "));
+  
+  let firstWord =
+    typeof message.text === "string"
+      ? message.text.substring(0, message.text.indexOf(" "))
+      : "";
 
   switch (firstWord) {
     case iaCommands.davinci3:
@@ -42,6 +46,7 @@ async function commands(client: any, message: any) {
         })
         .catch((err) => {
           console.error(err);
+          return "❗ Error: " + err;
         });
       break;
 
@@ -58,6 +63,7 @@ async function commands(client: any, message: any) {
         })
         .catch((err) => {
           console.error(err);
+          return "❗ Error: " + err;
         });
       break;
   }
@@ -66,5 +72,8 @@ async function commands(client: any, message: any) {
 async function start(client: Whatsapp) {
   await client
     .onAnyMessage((message) => commands(client, message))
-    .catch((err) => console.error(err));
+    .catch((err) => {
+      console.error(err);
+      return "❗ Error: " + err;
+    });
 }
